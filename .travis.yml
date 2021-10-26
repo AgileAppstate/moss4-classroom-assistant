@@ -1,0 +1,71 @@
+notifications:
+  email: false
+
+dist: trusty
+
+sudo: false
+
+matrix:
+  include:
+    - os: linux
+      env: CC=clang CXX=clang++ npm_config_clang=1
+      compiler: clang
+    - os: osx
+
+language: node_js
+node_js:
+  - "8.11.3"
+
+cache:
+  directories:
+    - node_modules
+
+# this ensures PRs based on a local branch are not built twice
+# the downside is that a PR targeting a different branch is not built
+# but as a workaround you can add the branch to this list
+branches:
+  only:
+    - master
+    - /^v[0-9].[0-9].[0-9].*/
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - xvfb
+      - gnome-keyring
+      - libsecret-1-dev
+      - python-gnomekeyring
+      - fakeroot
+      - rpm
+      - zip
+
+install:
+  - npm install --prune
+
+before_script:
+  - if [[ "$TRAVIS_OS_NAME" == "osx" && ! -z "$KEY_LINK" ]]; then bash ./script/setup-macos-keychain; fi
+
+script:
+  - ./script/test
+  - npm run make
+
+deploy:
+  skip_cleanup: true
+  provider: releases
+  name: ${TRAVIS_TAG}
+  tag_name: ${TRAVIS_TAG}
+  draft: true
+  file_glob: true
+  api_key:
+    secure: ${GITHUB_TOKEN}
+  file:
+    - "out/make/**/*.zip"
+    - "out/make/**/*.rpm"
+    - "out/make/**/*.deb"
+  on:
+    all_branches: true
+    tags: true
+    #deploy only on tag matching semantic versioning format
+    condition: "$TRAVIS_TAG =~ ^v[0-9].[0-9].[0-9].*$"
