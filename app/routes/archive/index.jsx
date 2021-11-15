@@ -28,6 +28,19 @@ const forwardButton = (progress, quitApp) => {
   }
 }
 
+const mossButton = (progress, quitApp) => {
+  if (progress < 0 || progress === 100) {
+    return (
+      {
+        label: "Run MOSS on files",
+        route: "/populate",
+        onClick: quitApp
+      }
+    )
+  }
+}
+
+
 const ArchivePage = ({
   quitApp,
   progress
@@ -44,6 +57,7 @@ const ArchivePage = ({
         disabled: progress < 0 || progress === 100
       }}
       right= {forwardButton(progress, quitApp)}
+      center= {mossButton(progress, quitApp)}
     />
   </div>
 )

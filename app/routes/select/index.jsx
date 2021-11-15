@@ -38,12 +38,6 @@ class SelectPage extends Component {
             route: "/confirm",
             disabled: (this.props.fetching || this.props.submissions.length < 1)
           }}
-          
-          center={{
-            label: "Run MOSS on selected repositories",
-            route: "/confirm",
-            disabled: (this.props.fetching || this.props.submissions.length < 1)
-          }}
         />
       </div>
     )
