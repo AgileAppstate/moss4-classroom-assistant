@@ -37,24 +37,23 @@ const mossButton = (progress, destination) => {
         label: "Run MOSS on files",
         route: "/archive",
         onClick: async function (state) {
-          const util = require('util')
-          const exec = util.promisify(require('child_process').exec)
+          const util = require("util")
+          const exec = util.promisify(require("child_process").exec)
           const child = await exec(`./app/routes/archive/moss -l java ${destination}/hello-world-11-17-2021-04-41-32/*/*.java ${destination}/hello-world-11-17-2021-04-41-32/*/*.java >> ./app/routes/archive/output.moss`,
-              function (error, stdout, stderr) {
-                window.alert(stdout)
-                  // console.log('stdout: ' + stdout);
-                  // console.log('stderr: ' + stderr);
-                  if (error !== null) {
-                      window.alert('exec error: ' + error);
-                  }
-              });
-          child();
+            function (error, stdout, stderr) {
+              window.alert(stdout)
+              // console.log("stdout: " + stdout);
+              // console.log("stderr: " + stderr);
+              if (error !== null) {
+                window.alert("exec error: " + error)
+              }
+            })
+          child()
         }
       }
     )
   }
 }
-
 
 const ArchivePage = ({
   quitApp,
