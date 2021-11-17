@@ -6,8 +6,14 @@ import { connect } from "react-redux"
 
 import ItemArchivePanel from "../components/ItemArchivePanel"
 import { submissionViewDirectory } from "../../../modules/submissions/actions/submission-view-directory"
+import { cloneDestination } from "../../../modules/settings/selectors"
 
-const mapStateToProps = (state, ownProps) => ownProps
+const mapStateToProps = (state, ownProps) => {
+  return {
+    ownProps,
+    destination: cloneDestination(state)
+  }
+}
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
