@@ -12,6 +12,9 @@ import { settingsResetState } from "../../modules/settings/actions/settings-rese
 import { progress } from "../../modules/submissions/selectors"
 
 import { cloneDestination } from "../../modules/settings/selectors"
+import { getAssignmentFolder } from "../../lib/pathutils"
+import { name } from "../../modules/assignment/selectors"
+import { dir } from "../../modules/assignment/selectors"
 
 const methods = {
   componentDidMount (_props) {
@@ -30,7 +33,7 @@ const forwardButton = (progress, quitApp) => {
   }
 }
 
-const mossButton = (progress, destination) => {
+const mossButton = (progress, destination, assignment) => {
   if (progress < 0 || progress === 100) {
     return (
       {
@@ -39,7 +42,8 @@ const mossButton = (progress, destination) => {
         onClick: async function (state) {
           const util = require("util")
           const exec = util.promisify(require("child_process").exec)
-          const child = await exec(`./app/routes/archive/moss -l java ${destination}/hello-world-11-17-2021-04-41-32/*/*.java ${destination}/hello-world-11-17-2021-04-41-32/*/*.java >> ./app/routes/archive/output.moss`,
+          window.alert(assignment)
+          const child = await exec(`./app/routes/archive/moss -l java ${assignment}/*/*.java ${assignment}/*/*.java >> ./app/routes/archive/output.moss`,
             function (error, stdout, stderr) {
               window.alert(stdout)
               // console.log("stdout: " + stdout);
@@ -58,11 +62,12 @@ const mossButton = (progress, destination) => {
 const ArchivePage = ({
   quitApp,
   progress,
-  cloneDestination
+  cloneDestination,
+  assignment
 }) => (
   <div>
     <AssignmentPanel/>
-    <ArchiveProgressPanel progress={progress} cloneDestination={cloneDestination}/>
+    <ArchiveProgressPanel progress={progress} cloneDestination={cloneDestination} assignment={assignment}/>
     <SubmissionArchivePanelList />
     <NavFooter
       left={{
@@ -72,14 +77,15 @@ const ArchivePage = ({
         disabled: progress < 0 || progress === 100
       }}
       right= {forwardButton(progress, quitApp)}
-      center= {mossButton(progress, cloneDestination)}
+      center= {mossButton(progress, cloneDestination, assignment)}
     />
   </div>
 )
 
 const mapStateToProps = (state) => ({
   progress: progress(state),
-  cloneDestination: cloneDestination(state)
+  cloneDestination: cloneDestination(state),
+  assignment: state.assignment.dir
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -91,7 +97,8 @@ const mapDispatchToProps = (dispatch) => ({
 ArchivePage.propTypes = {
   quitApp: PropTypes.func.isRequired,
   progress: PropTypes.number,
-  cloneDestination: PropTypes.string
+  cloneDestination: PropTypes.string,
+  assignment: PropTypes.string
 }
 
 export default lifecycle(methods)(connect(mapStateToProps, mapDispatchToProps)(ArchivePage))
