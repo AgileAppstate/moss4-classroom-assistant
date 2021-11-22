@@ -8,6 +8,8 @@ import { getAssignmentFolder } from "../../../lib/pathutils"
 
 import Promise from "bluebird"
 
+import {assignmentDir} from "../../assignment/actions/assignment-dir"
+
 const submissionClone = submissionCloneFunc(clone)
 // PUBLIC: Async thunk action for cloning all selected submissions.
 export const submissionCloneAll = () => {
@@ -15,7 +17,7 @@ export const submissionCloneAll = () => {
     const basePath = cloneDestination(getState())
     const assignmentName = name(getState())
     const cloneDirectory = getAssignmentFolder(basePath, assignmentName)
-
+    dispatch(assignmentDir(cloneDirectory))
     const selectedSubmissions = selected(getState())
     return Promise.map(selectedSubmissions, submission => {
       return dispatch(submissionClone(submission, cloneDirectory))
