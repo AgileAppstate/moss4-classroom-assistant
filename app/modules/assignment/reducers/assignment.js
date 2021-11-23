@@ -6,6 +6,7 @@ import {
   ASSIGNMENT_ERROR_INFO,
   ASSIGNMENT_SET_URL,
   ASSIGNMENT_RESET,
+  ASSIGNMENT_DIR,
 } from "../constants"
 
 const initialState = {
@@ -32,6 +33,8 @@ const assignment = (state = initialState, action) => {
     return Object.assign({}, state, { type: action.payload })
   case ASSIGNMENT_RESET:
     return initialState
+  case ASSIGNMENT_DIR:
+    return Object.assign({}, state, { dir: action.payload })
   default:
     return state
   }

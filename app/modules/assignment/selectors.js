@@ -20,6 +20,11 @@ export const name = createSelector(
   (assignment) => assignment.title
 )
 
+export const dir = createSelector(
+  all,
+  (assignment) => assignment.dir
+)
+
 export const url = createSelector(
   all,
   (assignment) => assignment.url

@@ -63,28 +63,8 @@ module.exports = {
         },
       },
     },
-    {
-      name: "@electron-forge/maker-rpm",
-      config: {
-        options: {
-          icon: "./app/resources/images/classroom-logo.png",
-          categories: ["Education"],
-          homepage: "https://classroom.github.com/assistant",
-        },
-      },
-    },
   ],
   publishers: [
-    {
-      name: "@electron-forge/publisher-github",
-      config: {
-        repository: {
-          owner: "education",
-          name: "classroom-assistant"
-        },
-        prerelease: true
-      }
-    }
   ],
   windowsStoreConfig: {
     packageName: "",
