@@ -42,12 +42,15 @@ const mossButton = (progress, destination, assignment) => {
         onClick: async function (state) {
           const util = require("util")
           const exec = util.promisify(require("child_process").exec)
-          window.alert(assignment)
-          const child = await exec(`./app/routes/archive/moss -l java ${assignment}/*/*.java ${assignment}/*/*.java >> ./app/routes/archive/output.moss`,
+          window.alert("Running MOSS. Please wait.")
+          const child = await exec(`./app/routes/archive/moss -l java ${assignment}/*/*.java ${assignment}/*/*.java`,
             function (error, stdout, stderr) {
-              window.alert(stdout)
-              // console.log("stdout: " + stdout);
-              // console.log("stderr: " + stderr);
+              let arr = stdout.split("\n")
+              const link = arr[arr.length - 2]
+              let res = window.confirm(`MOSS completed. View results at ${link}?`)
+              if (res) {
+                window.open(link, "_blank")
+              }
               if (error !== null) {
                 window.alert("exec error: " + error)
               }
